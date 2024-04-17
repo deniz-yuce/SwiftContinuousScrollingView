@@ -7,18 +7,18 @@
 
 import UIKit
 
-final class ContinuousScrollingView: UIView {
+final public class ContinuousScrollingView: UIView {
     
-    var textToScroll = ""
-    var font: UIFont =  UIFont.systemFont(ofSize: 14.0)
-    var textColor: UIColor = .black
+    public var textToScroll = ""
+    public var font: UIFont =  UIFont.systemFont(ofSize: 14.0)
+    public var textColor: UIColor = .black
     
-    override func layoutSubviews() {
+    public override func layoutSubviews() {
         super.layoutSubviews()
         backgroundColor = .clear
     }
     
-    func startAnimations() {
+    public func startAnimations() {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
             self.setupScrollView()
         }
