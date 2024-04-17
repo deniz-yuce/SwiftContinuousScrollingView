@@ -21,6 +21,7 @@
 
 ```swift
 import UIKit
+import ContinuousScrollingView
 
 // Create an instance of ContinuousScrollingView
 let scrollingView = ContinuousScrollingView()
