@@ -1,5 +1,5 @@
 # SwiftContinuousScrollingView
-`ContinuousScrollingView is a custom UIView subclass designed to create a scrolling effect for text.
+`ContinuousScrollingView` is a custom UIView subclass designed to create a scrolling effect for text.
 ## Overview
 `ContinuousScrollingView` provides a convenient way to display scrolling text within a UIView. It is useful for showcasing text content that exceeds the width of the view's bounds, allowing the text to continuously scroll horizontally. It can be used in any scroll view-type class (in a tableview/collectionview as a cell).
 
