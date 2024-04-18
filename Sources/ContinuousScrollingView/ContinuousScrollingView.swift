@@ -9,6 +9,8 @@ import UIKit
 
 final public class ContinuousScrollingView: UIView {
     
+    // MARK: - Public Properties
+    
     public var textToScroll = ""
     public var font: UIFont = .systemFont(ofSize: 14.0)
     public var textColor: UIColor = .black
@@ -17,24 +19,39 @@ final public class ContinuousScrollingView: UIView {
     public var duration: TimeInterval = 30
     public var delay: CGFloat = 0.2
     
+    // MARK: - Computed Properties
+    
+    public var textHeight: CGFloat {
+        textToScroll.size(withFont: font).height
+    }
+    
+    // MARK: - Private Properties
+    
     private let scrollView = UIScrollView()
     private let movingLabel = UILabel()
+    
+    // MARK: - Start View
     
     public func startAnimations() {
         setupScrollView()
     }
     
+    // MARK: - Prepare View
+    
     private func setupScrollView() {
         scrollView.backgroundColor = viewBackgroundColor
         scrollView.isUserInteractionEnabled = false
+        scrollView.showsHorizontalScrollIndicator = false
+        
+        // Reset View
         removeAllSubviews()
         scrollView.removeFromSuperview()
-        scrollView.showsHorizontalScrollIndicator = false
-        addSubview(scrollView)
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
         
         let textSize = textToScroll.size(withFont: font)
         
+        // Set ScrollView Constraints
+        addSubview(scrollView)
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             scrollView.topAnchor.constraint(equalTo: topAnchor),
             scrollView.bottomAnchor.constraint(equalTo: bottomAnchor),
@@ -42,6 +59,7 @@ final public class ContinuousScrollingView: UIView {
             scrollView.trailingAnchor.constraint(equalTo: trailingAnchor),
         ])
         
+        // Avaiod constraints conflict, when to give another heightAnchor
         let heightConstraint = scrollView.heightAnchor.constraint(equalToConstant: textSize.height)
         heightConstraint.priority = .defaultLow
         heightConstraint.isActive = true
@@ -58,6 +76,7 @@ final public class ContinuousScrollingView: UIView {
         movingLabel.backgroundColor = textBackgroundColor
         movingLabel.sizeToFit()
         
+        // Set movingLabel Constraints
         scrollView.addSubview(movingLabel)
         movingLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -71,12 +90,16 @@ final public class ContinuousScrollingView: UIView {
         scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: UIScreen.main.bounds.width)
     }
     
+    // MARK: - Animations
+    
     private func startScrolling() {
         UIView.animate(withDuration: duration, delay: delay, options: [.repeat, .curveLinear], animations: {
             self.scrollView.contentOffset.x = self.movingLabel.frame.width + UIScreen.main.bounds.width
         })
     }
 }
+
+// MARK: - String Extension
 
 fileprivate extension String {
     func size(withFont font: UIFont) -> CGSize {
@@ -90,6 +113,8 @@ fileprivate extension String {
         return String(repeating: self, count: repetitionsNeeded)
     }
 }
+
+// MARK: - UIView Extension
 
 fileprivate extension UIView {
     func removeAllSubviews() {
