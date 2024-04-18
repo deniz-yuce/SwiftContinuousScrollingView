@@ -23,19 +23,37 @@
 import UIKit
 import ContinuousScrollingView
 
-// Create an instance of ContinuousScrollingView
-let scrollingView = ContinuousScrollingView()
+class ViewController: UIViewController {
+    
+    // Create an instance of ContinuousScrollingView
+    let scrollingView = ContinuousScrollingView()
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        // Customize the scrolling text
+        scrollingView.textToScroll = "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+        scrollingView.font = UIFont.systemFont(ofSize: 40.0)
+        scrollingView.textColor = .black
+        scrollingView.textBackgroundColor = .red
+        scrollingView.viewBackgroundColor = .blue
+        scrollingView.delay = 0.2
+        scrollingView.duration = 10
 
-// Customize the scrolling text
-scrollingView.textToScroll = "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-scrollingView.font = UIFont.systemFont(ofSize: 16.0)
-scrollingView.textColor = .black
+        // Add the scrolling view to your view hierarchy
+        view.addSubview(scrollingView)
+        scrollingView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            scrollingView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            scrollingView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollingView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+        ])
 
-// Add the scrolling view to your view hierarchy
-view.addSubview(scrollingView)
+        // Start the scrolling animation
+        scrollingView.startAnimations()
+    }
+}
 
-// Start the scrolling animation
-scrollingView.startAnimations()
 ```
 ## Requirements
 
