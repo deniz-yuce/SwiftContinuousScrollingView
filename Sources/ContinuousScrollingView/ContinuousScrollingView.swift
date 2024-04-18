@@ -101,7 +101,7 @@ final public class ContinuousScrollingView: UIView {
 
 // MARK: - String Extension
 
-fileprivate extension String {
+private extension String {
     func size(withFont font: UIFont) -> CGSize {
         let constraintRect = CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude)
         let boundingBox = self.boundingRect(with: constraintRect, options: .usesLineFragmentOrigin, attributes: [.font: font], context: nil)
@@ -116,7 +116,7 @@ fileprivate extension String {
 
 // MARK: - UIView Extension
 
-fileprivate extension UIView {
+private extension UIView {
     func removeAllSubviews() {
         for subView in self.subviews {
             subView.removeFromSuperview()
