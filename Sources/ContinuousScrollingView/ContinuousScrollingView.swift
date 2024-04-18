@@ -40,8 +40,11 @@ final public class ContinuousScrollingView: UIView {
             scrollView.bottomAnchor.constraint(equalTo: bottomAnchor),
             scrollView.leadingAnchor.constraint(equalTo: leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            scrollView.heightAnchor.constraint(equalToConstant: textSize.height)
         ])
+        
+        let heightConstraint = scrollView.heightAnchor.constraint(equalToConstant: textSize.height)
+        heightConstraint.priority = .defaultLow
+        heightConstraint.isActive = true
         
         setUpTexts(textWidth: textSize.width)
         startScrolling()
