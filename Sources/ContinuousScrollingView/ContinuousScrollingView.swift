@@ -10,27 +10,20 @@ import UIKit
 final public class ContinuousScrollingView: UIView {
     
     public var textToScroll = ""
-    public var font: UIFont =  UIFont.systemFont(ofSize: 14.0)
+    public var font: UIFont = .systemFont(ofSize: 14.0)
     public var textColor: UIColor = .black
+    public var duration: TimeInterval = 30
+    public var delay: CGFloat = 0.2
     
-    public override func layoutSubviews() {
-        super.layoutSubviews()
-        backgroundColor = .clear
-    }
+    private let scrollView = UIScrollView()
+    private let movingLabelFirstPart = UILabel()
     
     public func startAnimations() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-            self.setupScrollView()
-        }
+        setupScrollView()
     }
     
     private func setupScrollView() {
-        self.removeAllSubviews()
-        
-        let scrollView = UIScrollView()
-        let movingLabelFirstPart = UILabel()
-        let movingLabelSecondContinious = UILabel()
-        
+        removeAllSubviews()
         scrollView.removeFromSuperview()
         scrollView.showsHorizontalScrollIndicator = false
         addSubview(scrollView)
@@ -43,56 +36,48 @@ final public class ContinuousScrollingView: UIView {
             scrollView.trailingAnchor.constraint(equalTo: trailingAnchor),
         ])
         
-        self.setUpTexts(movingLabelFirstPart: movingLabelFirstPart, movingLabelSecondContinious: movingLabelSecondContinious, scrollView: scrollView)
-        self.startScrolling(movingLabelFirstPart: movingLabelFirstPart, movingLabelSecondContinious: movingLabelSecondContinious, scrollView: scrollView)
+        setUpTexts()
+        startScrolling()
     }
-    
-    private func setUpTexts(movingLabelFirstPart: UILabel, movingLabelSecondContinious: UILabel, scrollView: UIScrollView) {
-        let screenSize = bounds.width
-        var repeatedText = textToScroll
-        while repeatedText.width(withConstrainedHeight: 32, font: font) < screenSize * 2 {
-            repeatedText += textToScroll
-        }
         
+    private func setUpTexts() {
+        let repeatedText = textToScroll.repeated(toFillScreenWidthTwice: font, screenWidth: UIScreen.main.bounds.width)
         movingLabelFirstPart.text = repeatedText
-        movingLabelSecondContinious.text = repeatedText
-        
         movingLabelFirstPart.textColor = textColor
-        movingLabelSecondContinious.textColor = textColor
-        
         movingLabelFirstPart.sizeToFit()
-        movingLabelSecondContinious.sizeToFit()
         
         scrollView.addSubview(movingLabelFirstPart)
-        scrollView.addSubview(movingLabelSecondContinious)
         
         movingLabelFirstPart.frame.origin = .zero
-        movingLabelSecondContinious.frame.origin = CGPoint(x: movingLabelFirstPart.bounds.width, y: 0)
         
         scrollView.contentSize.width = movingLabelFirstPart.bounds.width * 2
-        scrollView.showsHorizontalScrollIndicator = false
     }
     
-    private func startScrolling(movingLabelFirstPart: UILabel, movingLabelSecondContinious: UILabel, scrollView: UIScrollView) {
-        let duration: TimeInterval = 30
-        
-        UIView.animate(withDuration: duration, delay: 0, options: [.repeat, .curveLinear], animations: {
-            scrollView.contentOffset.x = movingLabelFirstPart.frame.width
-        }, completion: nil)
+    private func startScrolling() {
+        UIView.animate(withDuration: duration, delay: delay, options: [.repeat, .curveLinear], animations: { [unowned self] in
+            self.scrollView.contentOffset.x = self.movingLabelFirstPart.frame.width
+        })
     }
 }
 
 extension String {
-    func width(withConstrainedHeight height: CGFloat, font: UIFont) -> CGFloat {
+    fileprivate func width(withConstrainedHeight height: CGFloat, font: UIFont) -> CGFloat {
         let constraintRect = CGSize(width: .greatestFiniteMagnitude, height: height)
         let boundingBox = self.boundingRect(with: constraintRect, options: .usesLineFragmentOrigin, attributes: [.font: font], context: nil)
         
         return ceil(boundingBox.width)
     }
+    
+    fileprivate func repeated(toFillScreenWidthTwice font: UIFont, screenWidth: CGFloat) -> String {
+        let textWidth = self.width(withConstrainedHeight: 32, font: font)
+        let repetitionsNeeded = Int(ceil((screenWidth * 2) / textWidth))
+        return String(repeating: self, count: repetitionsNeeded)
+    }
 }
 
+
 extension UIView {
-    func removeAllSubviews() {
+    fileprivate func removeAllSubviews() {
         for subView in self.subviews {
             subView.removeFromSuperview()
         }
