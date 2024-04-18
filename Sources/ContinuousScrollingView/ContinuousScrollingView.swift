@@ -20,17 +20,13 @@ final public class ContinuousScrollingView: UIView {
     private let scrollView = UIScrollView()
     private let movingLabel = UILabel()
     
-    public override func layoutSubviews() {
-        super.layoutSubviews()
-    }
-    
     public func startAnimations() {
         setupScrollView()
     }
     
     private func setupScrollView() {
         scrollView.backgroundColor = viewBackgroundColor
-        
+        scrollView.isUserInteractionEnabled = false
         removeAllSubviews()
         scrollView.removeFromSuperview()
         scrollView.showsHorizontalScrollIndicator = false
@@ -69,11 +65,12 @@ final public class ContinuousScrollingView: UIView {
         ])
         
         scrollView.contentSize.width = movingLabel.bounds.width * 2
+        scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: UIScreen.main.bounds.width)
     }
     
     private func startScrolling() {
-        UIView.animate(withDuration: duration, delay: delay, options: [.repeat, .curveLinear], animations: { [unowned self] in
-            self.scrollView.contentOffset.x = self.movingLabel.frame.width
+        UIView.animate(withDuration: duration, delay: delay, options: [.repeat, .curveLinear], animations: {
+            self.scrollView.contentOffset.x = self.movingLabel.frame.width + UIScreen.main.bounds.width
         })
     }
 }
